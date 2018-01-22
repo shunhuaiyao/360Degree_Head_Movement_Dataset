@@ -53,7 +53,7 @@ class Test(object):
         iniConfParser = Helpers.GetIniConfParser()
         fileStr = '[Config]\n'
         fileStr += 'textureConfig=Video1\n'
-        fileStr += 'projectionConfig=Equirectangular\n'
+        fileStr += 'projectionConfig={}\n'.format(self.video.projection)
         fileStr += 'logWriterConfig=LogWriter\n'
         fileStr += 'publisherLogConfig=PublisherLog\n'
         fileStr += '\n'
@@ -67,6 +67,9 @@ class Test(object):
         fileStr += '\n'
         fileStr += '[Equirectangular]\n'
         fileStr += 'type=Equirectangular\n'
+        fileStr += '\n'
+        fileStr += '[CubeMap]\n'
+        fileStr += 'type=CubeMap\n'
         fileStr += '\n'
         fileStr += '[LogWriter]\n'
         fileStr += 'outputDirPath={}\n'.format(self.logFolder)

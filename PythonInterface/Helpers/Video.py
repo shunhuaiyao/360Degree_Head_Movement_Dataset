@@ -35,7 +35,7 @@ class Video(object):
     """Class that contains all usefull information usefull on a video."""
 
     def __init__(self, videoPath, videoId, nbMaxFrames, bufferSize,
-                 startOffsetInSecond):
+                 startOffsetInSecond, projection):
         """Init function. It also compute the md5 sum of the video.
 
         :param videoPath: The absolute or relatif path to the video
@@ -44,6 +44,7 @@ class Video(object):
         :type videoId: str
         :type nbMaxFrames: int
         :type bufferSize: int
+        :type projection: str
         """
         self.logger = logging.getLogger('TestManager.Helpers.Video')
         self.path = videoPath
@@ -51,6 +52,7 @@ class Video(object):
         self.nbMaxFrames = nbMaxFrames
         self.bufferSize = bufferSize
         self.startOffsetInSecond = startOffsetInSecond
+        self.projection = projection
         self.md5sum = md5sum(self.path)
         self.logger.info('New video with id {} and MD5 sum {}'.format(
             self.id,

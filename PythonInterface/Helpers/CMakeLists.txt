@@ -19,7 +19,7 @@ if(OPENMP_FOUND)
 endif()
 
 # Find necessary packages
-FIND_PACKAGE( PythonLibs 3.6 REQUIRED )
+FIND_PACKAGE( PythonLibs 3.4 REQUIRED )
 
 FIND_PACKAGE(Boost 1.45.0)
 IF(Boost_FOUND)
