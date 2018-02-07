@@ -1,11 +1,12 @@
 //Author: Xavier Corbillon
 //IMT Atlantique
 #include "MeshCube.hpp"
-
+#include <iostream>
 //standard includes
 #include <cmath>
 
 using namespace IMT;
+constexpr float PI = 3.141592653589793238462643383279502884L;
 
 MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
 {
@@ -34,169 +35,292 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
       GLfloat maxX = -scale + (i+1) * (2 * scale) / numQuadsPerEdge;
       GLfloat minY = -scale + j * (2 * scale) / numQuadsPerEdge;
       GLfloat maxY = -scale + (j + 1) * (2 * scale) / numQuadsPerEdge;
-      faceBufferData.push_back(minX);
-      faceBufferData.push_back(maxY);
-      faceBufferData.push_back(Z);
+      {
+        faceBufferData.push_back(minX);
+        faceBufferData.push_back(maxY);
+        faceBufferData.push_back(Z);
 
-      faceBufferData.push_back(minX);
-      faceBufferData.push_back(minY);
-      faceBufferData.push_back(Z);
+        faceBufferData.push_back(minX);
+        faceBufferData.push_back(minY);
+        faceBufferData.push_back(Z);
 
-      faceBufferData.push_back(maxX);
-      faceBufferData.push_back(minY);
-      faceBufferData.push_back(Z);
+        faceBufferData.push_back(maxX);
+        faceBufferData.push_back(minY);
+        faceBufferData.push_back(Z);
 
-      faceBufferData.push_back(maxX);
-      faceBufferData.push_back(maxY);
-      faceBufferData.push_back(Z);
+        faceBufferData.push_back(maxX);
+        faceBufferData.push_back(maxY);
+        faceBufferData.push_back(Z);
 
-      faceBufferData.push_back(minX);
-      faceBufferData.push_back(maxY);
-      faceBufferData.push_back(Z);
+        faceBufferData.push_back(minX);
+        faceBufferData.push_back(maxY);
+        faceBufferData.push_back(Z);
 
-      faceBufferData.push_back(maxX);
-      faceBufferData.push_back(minY);
-      faceBufferData.push_back(Z);
-
-      auto tmptmpUVBufferData = GetUVs(float(i), float(j), float(numQuadsPerEdge));
-      tmpUVBufferData.insert(tmpUVBufferData.end(),
-        tmptmpUVBufferData.begin(), tmptmpUVBufferData.end());
+        faceBufferData.push_back(maxX);
+        faceBufferData.push_back(minY);
+        faceBufferData.push_back(Z);
+      }
+      // auto tmptmpUVBufferData = GetUVs(float(i), float(j), float(numQuadsPerEdge));
+      // tmpUVBufferData.insert(tmpUVBufferData.end(),
+      //   tmptmpUVBufferData.begin(), tmptmpUVBufferData.end());
     }
   }
   // Make a copy of the vertices for each face, then modulate
   // the color by the face color and rotate the coordinates to
   // put them on the correct cube face.
 
+  std::vector<GLfloat> tmpVertexBufferData;
+  
+
+  // left face
   // +Z is blue and is in the same location as the original
   // faces.
   {
     // X = X, Y = Y, Z = Z
+    auto faceId = 5;
     std::array<GLfloat, 3> scales = { 1.0f, 1.0f, 1.0f };
     std::array<size_t, 3> indices = { 0, 1, 2 };
     std::vector<GLfloat> myFaceBufferData =
-      VertexRotate(faceBufferData, indices, scales);
+      VertexRotate(faceId, faceBufferData, indices, scales);
 
-    //UV cubeMap
-    auto myUVBufferData =  TransposeUVs(tmpUVBufferData, 0);
-
-    // Catenate the vertices onto the end of the
-    // vertex buffer.
-    AppendVertexBufferData(myFaceBufferData);
-
-    // Catenate the UVs onto the end of the
-    // UV buffer.
-    AppendUvBufferData(myUVBufferData);
+    tmpVertexBufferData.insert(tmpVertexBufferData.end(),
+      myFaceBufferData.begin(), myFaceBufferData.end());
+    
+    // out.push_back((float)1/3);
+    // out.push_back(0.0);
+    // out.push_back((float)1/3);
+    // out.push_back(0.5);
+    // out.push_back(0.0);
+    // out.push_back(0.5);
+    // out.push_back(0.0);
+    // out.push_back(0.0);
+    // out.push_back((float)1/3);
+    // out.push_back(0.0);
+    // out.push_back(0.0);
+    // out.push_back(0.5);
+    
   }
 
+  // right face
   // -Z is cyan and is in the opposite size from the
   // original face (mirror all 3).
   {
     // X = -X, Y = -Y, Z = -Z
+    auto faceId = 4;
     std::array<GLfloat, 3> scales = { -1.0f, -1.0f, -1.0f };
     std::array<size_t, 3> indices = { 0, 1, 2 };
     std::vector<GLfloat> myFaceBufferData =
-      VertexRotate(faceBufferData, indices, scales);
+      VertexRotate(faceId, faceBufferData, indices, scales);
 
-    //UV cubeMap
-    auto myUVBufferData = TransposeUVs(tmpUVBufferData, 5);
+    tmpVertexBufferData.insert(tmpVertexBufferData.end(),
+      myFaceBufferData.begin(), myFaceBufferData.end());
 
-    // Catenate the vertices onto the end of the
-    // vertex buffer.
-    AppendVertexBufferData(myFaceBufferData);
-
-    // Catenate the UVs onto the end of the
-    // UV buffer.
-    AppendUvBufferData(myUVBufferData);
+    // out.push_back(1.0);
+    // out.push_back(0.5);
+    // out.push_back(1.0);
+    // out.push_back(0.0);
+    // out.push_back((float)2/3);
+    // out.push_back(0.0);
+    // out.push_back((float)2/3);
+    // out.push_back(0.5);
+    // out.push_back(1.0);
+    // out.push_back(0.5);
+    // out.push_back((float)2/3);
+    // out.push_back(0.0);
+   
   }
 
+  // back face
   // +X is red and is rotated -90 degrees from the original
   // around Y.
   {
     // X = Z, Y = Y, Z = -X
+    auto faceId = 1;
     std::array<GLfloat, 3> scales = { 1.0f, 1.0f, -1.0f };
     std::array<size_t, 3> indices = { 2, 1, 0 };
     std::vector<GLfloat> myFaceBufferData =
-      VertexRotate(faceBufferData, indices, scales);
+      VertexRotate(faceId, faceBufferData, indices, scales);
 
-    //UV cubeMap
-    auto myUVBufferData = TransposeUVs(tmpUVBufferData, 2);
+    tmpVertexBufferData.insert(tmpVertexBufferData.end(),
+      myFaceBufferData.begin(), myFaceBufferData.end());
 
-    // Catenate the vertices onto the end of the
-    // vertex buffer.
-    AppendVertexBufferData(myFaceBufferData);
-
-    // Catenate the UVs onto the end of the
-    // UV buffer.
-    AppendUvBufferData(myUVBufferData);
+    // out.push_back((float)2/3);
+    // out.push_back(1.0);
+    // out.push_back((float)1/3);
+    // out.push_back(1.0);
+    // out.push_back((float)1/3);
+    // out.push_back(0.5);
+    // out.push_back((float)2/3);
+    // out.push_back(0.5);
+    // out.push_back((float)2/3);
+    // out.push_back(1.0);
+    // out.push_back((float)1/3);
+    // out.push_back(0.5);
+    
   }
 
+  // front face
   // -X is magenta and is rotated 90 degrees from the original
   // around Y.
   {
     // X = -Z, Y = Y, Z = X
+    auto faceId = 0;
     std::array<GLfloat, 3> scales = { -1.0f, 1.0f, 1.0f };
     std::array<size_t, 3> indices = { 2, 1, 0 };
     std::vector<GLfloat> myFaceBufferData =
-      VertexRotate(faceBufferData, indices, scales);
+      VertexRotate(faceId, faceBufferData, indices, scales);
 
-    //UV cubeMap
-    auto myUVBufferData = TransposeUVs(tmpUVBufferData, 1);
+    tmpVertexBufferData.insert(tmpVertexBufferData.end(),
+      myFaceBufferData.begin(), myFaceBufferData.end());
 
-    // Catenate the vertices onto the end of the
-    // vertex buffer.
-    AppendVertexBufferData(myFaceBufferData);
-
-    // Catenate the UVs onto the end of the
-    // UV buffer.
-    AppendUvBufferData(myUVBufferData);
+    // out.push_back((float)2/3);
+    // out.push_back(0.0);
+    // out.push_back((float)2/3);
+    // out.push_back(0.5);
+    // out.push_back((float)1/3);
+    // out.push_back(0.5);
+    // out.push_back((float)1/3);
+    // out.push_back(0.0);
+    // out.push_back((float)2/3);
+    // out.push_back(0.0);
+    // out.push_back((float)1/3);
+    // out.push_back(0.5);
+    
   }
 
+  // top face
   // +Y is green and is rotated -90 degrees from the original
   // around X.
   {
     // X = X, Y = Z, Z = -Y
+    auto faceId = 2;
     std::array<GLfloat, 3> scales = { 1.0f, 1.0f, -1.0f };
     std::array<size_t, 3> indices = { 0, 2, 1 };
     std::vector<GLfloat> myFaceBufferData =
-      VertexRotate(faceBufferData, indices, scales);
+      VertexRotate(faceId, faceBufferData, indices, scales);
 
-    //UV cubeMap
-    auto myUVBufferData = TransposeUVs(tmpUVBufferData, 3);
+    tmpVertexBufferData.insert(tmpVertexBufferData.end(),
+      myFaceBufferData.begin(), myFaceBufferData.end());
 
-    // Catenate the vertices onto the end of the
-    // vertex buffer.
-    AppendVertexBufferData(myFaceBufferData);
-
-    // Catenate the UVs onto the end of the
-    // UV buffer.
-    AppendUvBufferData(myUVBufferData);
+    // out.push_back(1.0);
+    // out.push_back(0.5);
+    // out.push_back(1.0);
+    // out.push_back(1.0);
+    // out.push_back((float)2/3);
+    // out.push_back(1.0);
+    // out.push_back((float)2/3);
+    // out.push_back(0.5);
+    // out.push_back(1.0);
+    // out.push_back(0.5);
+    // out.push_back((float)2/3);
+    // out.push_back(1.0);
+    
   }
 
+  // bottom face
   // -Y is yellow and is rotated 90 degrees from the original
   // around X.
   {
 
     // X = X, Y = -Z, Z = Y
+    auto faceId = 3;
     std::array<GLfloat, 3> scales = { 1.0f, -1.0f, 1.0f };
     std::array<size_t, 3> indices = { 0, 2, 1 };
     std::vector<GLfloat> myFaceBufferData =
-      VertexRotate(faceBufferData, indices, scales);
+      VertexRotate(faceId, faceBufferData, indices, scales);
 
-    //UV cubeMap
-    auto myUVBufferData = TransposeUVs(tmpUVBufferData, 4);
+    tmpVertexBufferData.insert(tmpVertexBufferData.end(),
+      myFaceBufferData.begin(), myFaceBufferData.end());
 
-    // Catenate the vertices onto the end of the
-    // vertex buffer.
-    AppendVertexBufferData(myFaceBufferData);
+    // out.push_back(0.0);
+    // out.push_back(1.0);
+    // out.push_back(0.0);
+    // out.push_back(0.5);
+    // out.push_back((float)1/3);
+    // out.push_back(0.5);
+    // out.push_back((float)1/3);
+    // out.push_back(1.0);
+    // out.push_back(0.0);
+    // out.push_back(1.0);
+    // out.push_back((float)1/3);
+    // out.push_back(0.5);
 
-    // Catenate the UVs onto the end of the
-    // UV buffer.
-    AppendUvBufferData(myUVBufferData);
   }
+
+  AppendVertexBufferData(GetVertexs(tmpVertexBufferData));
+  AppendUvBufferData(VertexToUVs(tmpVertexBufferData));
+
+  // std::vector<GLfloat> tmpVertexBufferData;
+  // int slices = 3600;
+  // int layercuts = 1800;
+  // float x, y, z, u, v, d; //d=diameter of circle at height y
+  // float theta; //theta used for angle about y axis
+  // float phi = 0.0f; //phi used for angle to determine y and d.
+  // float thetad = 2 * PI / slices; //theta delta
+  // float phid = PI / (layercuts + 1); //phi delta
+  // //NumVertices = (slices * layercuts) + 2;
+  // //NumIndices = ((slices + 2) * 2) + ((layercuts - 1) * (slices + 1) * 2);
+  // float tmpVertex[3] = {0.0f, 1.0f, 0.0f};
+  // tmpVertexBufferData.insert(tmpVertexBufferData.end(), tmpVertex, tmpVertex+3);
+
+  // for (unsigned int i = 0; i < layercuts; i++) {
+  //   y = std::cos(phi);
+  //   d = std::sin(phi);
+  //   theta = 0.0f;
+  //   for (unsigned int j = 0; j < slices; j++) {
+  //     x = std::sin(theta) * d;
+  //     z = std::cos(theta) * d;
+  //     u = 0.5f + (std::atan2(z, x) / (2 * PI));
+  //     v = 0.5f - (std::asin(y) / PI);
+  //     //vertices[(i * slices) + j + 1] = { { x / 2, y / 2, z / 2 },{ u, v },{ 1.0f, 1.0f, 1.0f },{ x, y, z } };
+  //     tmpVertex[0] = x;
+  //     tmpVertex[1] = y;
+  //     tmpVertex[2] = z;
+  //     tmpVertexBufferData.insert(tmpVertexBufferData.end(), tmpVertex, tmpVertex+3);
+  //     theta += thetad;
+  //   }
+  //   phi += phid;
+  // }
+
+  // tmpVertex[0] = 0.0f;
+  // tmpVertex[1] = -1.0f;
+  // tmpVertex[2] = 0.0f;
+  // tmpVertexBufferData.insert(tmpVertexBufferData.end(), tmpVertex, tmpVertex+3);
+  // AppendVertexBufferData(tmpVertexBufferData);
+  // AppendUvBufferData(VertexToUVs(tmpVertexBufferData));
+
+  // std::vector<GLfloat> vertices;
+  // int lats = 1000;
+  // int longs = 1000;
+  // for(int i = 0; i <= lats; i++) {
+  //   double lat0 = PI * (-0.5 + (double) (i - 1) / lats);
+  //   double z0  = sin(lat0);
+  //   double zr0 =  cos(lat0);
+
+  //   double lat1 = PI * (-0.5 + (double) i / lats);
+  //   double z1 = sin(lat1);
+  //   double zr1 = cos(lat1);
+
+  //   for(int j = 0; j <= longs; j++) {
+  //     double lng = 2 * PI * (double) (j - 1) / longs;
+  //     double x = cos(lng);
+  //     double y = sin(lng);
+  //     vertices.push_back(x * zr0);
+  //     vertices.push_back(y * zr0);
+  //     vertices.push_back(z0);
+         
+  //     vertices.push_back(x * zr1);
+  //     vertices.push_back(y * zr1);
+  //     vertices.push_back(z1);
+  //   }
+  // }
+  // AppendVertexBufferData(vertices);
+  // AppendUvBufferData(VertexToUVs(vertices));
 }
 
 
 std::vector<GLfloat> MeshCube::VertexRotate(
+    GLfloat const &faceId,
     std::vector<GLfloat> const &inVec,
     std::array<size_t, 3> const &indices,
     std::array<GLfloat, 3> const &scales)
@@ -207,94 +331,89 @@ std::vector<GLfloat> MeshCube::VertexRotate(
     // We don't have an even multiple of 3 elements, so bail.
     return out;
   }
-  out.resize(inVec.size());
+  // add faceId
+  out.resize(inVec.size()+elements);
   for (size_t i = 0; i < elements; i++) {
+    out[4 * i] = faceId;
     for (size_t p = 0; p < 3; p++) {
-      out[3 * i + p] = inVec[3*i + indices[p]] * scales[p];
+      out[4 * i + p + 1] = inVec[3*i + indices[p]] * scales[p];
     }
   }
   return out;
 }
 
-// return UV map for each vertex of the quad of normalized index (i,j) for face f.
-std::vector<GLfloat> MeshCube::GetUVs(float i, float j, float numQuadsPerEdge) {
-  std::vector<GLfloat> out;
-  out.push_back(i/(4.f*numQuadsPerEdge));
-  out.push_back((j+1.f)/(3.f*numQuadsPerEdge));
-
-  out.push_back(i/(4.f*numQuadsPerEdge));
-  out.push_back(j/(3.f*numQuadsPerEdge));
-
-  out.push_back((i+1.f)/(4.f*numQuadsPerEdge));
-  out.push_back(j/(3.f*numQuadsPerEdge));
-
-  out.push_back((i+1.f)/(4.f*numQuadsPerEdge));
-  out.push_back((j+1.f)/(3.f*numQuadsPerEdge));
-
-  out.push_back(i/(4.f*numQuadsPerEdge));
-  out.push_back((j+1.f)/(3.f*numQuadsPerEdge));
-
-  out.push_back((i+1.f)/(4.f*numQuadsPerEdge));
-  out.push_back(j/(3.f*numQuadsPerEdge));
-  return out;
-}
-
-std::vector<GLfloat> MeshCube::TransposeUVs( std::vector<GLfloat> const& inputUVs,
-    size_t faceId )
+std::vector<GLfloat> MeshCube::GetVertexs( std::vector<GLfloat> const& inputVertexs)
 {
   std::vector<GLfloat> out;
-  if (faceId >= 6)
+  for (size_t i = 0; i < inputVertexs.size(); i += 4)
   {
-    return out;
+    auto& x = inputVertexs[i+1];
+    auto& y = inputVertexs[i+2];
+    auto& z = inputVertexs[i+3];
+    out.push_back(x);
+    out.push_back(y);
+    out.push_back(z);
   }
-  out = inputUVs;
-  if (faceId == 0)
-  {
-    for (size_t i = 0; i < out.size(); i += 2)
+  return out;
+}
+
+
+std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVertexs)
+{
+  std::vector<GLfloat> out;
+
+  //Generate CubeMap UV map
+  for(size_t i = 0; i < inputVertexs.size(); i += 4){
+    
+    auto& faceId = inputVertexs[i];
+    auto& x = inputVertexs[i+1];
+    auto& y = inputVertexs[i+2];
+    auto& z = inputVertexs[i+3];
+    auto abs_x = std::fabs(x);
+    auto abs_y = std::fabs(y);
+    auto abs_z = std::fabs(z);
+    auto u = 0.0f, v = 0.0f;
+
+    if(faceId == 1)
     {
-      out[i] =  1.f/2.f - inputUVs[i];
-      out[i+1] =  2.f/3.f-inputUVs[i+1];
+      // back face
+      u = (1 + (y * (float)1/3)) / 2;
+      v = ((float)3/2 + (z * (float)1/2)) / 2;
     }
-  }
-  else if (faceId == 1)
-  {
-    for (size_t i = 0; i < out.size(); i += 2)
+    else if (faceId == 0)
     {
-      out[i] = 3.f/4.f - inputUVs[i];
-      out[i+1] = 2.f/3.f-inputUVs[i+1];
+      // front face
+      u = (1 - (z * (float)1/3)) / 2;
+      v = ((float)1/2 - (y * (float)1/2)) / 2;
     }
-  }
-  else if (faceId == 2)
-  {
-    for (size_t i = 0; i < out.size(); i += 2)
+    else if (faceId == 5)
     {
-      out[i] = 1.f/4.f - inputUVs[i];
-      out[i+1] =  2.f/3.f-inputUVs[i+1];
+      // left face
+      u = ((float)1/3 - (x * (float)1/3)) / 2;
+      v = ((float)1/2 - (y * (float)1/2)) / 2;
     }
-  }
-  else if (faceId == 3)
-  {
-    for (size_t i = 0; i < out.size(); i += 2)
+    else if (faceId == 4)
     {
-      out[i] = 1.f/2.f - inputUVs[i];
-      out[i+1] = 1.f/3.f - inputUVs[i+1];
+      // right face
+      u = ((float)5/3 + (x * (float)1/3)) / 2;
+      v = ((float)1/2 - (y * (float)1/2)) / 2;
     }
-  }
-  else if (faceId == 4)
-  {
-    for (size_t i = 0; i < out.size(); i += 2)
+    else if (faceId == 2)
     {
-      out[i] = 1.f/2.f - inputUVs[i];
-      out[i+1] = 1.f - inputUVs[i+1];
+      // top face
+      u = ((float)5/3 - (x * (float)1/3)) / 2;
+      v = ((float)3/2 + (z * (float)1/2)) / 2;
     }
-  }
-  else if (faceId == 5)
-  {
-    for (size_t i = 0; i < out.size(); i += 2)
+    else
     {
-      out[i] = 1.f - inputUVs[i];
-      out[i+1] = inputUVs[i+1] + 1.f/3.f;
+      // bottom face
+      u = ((float)1/3 + (x * (float)1/3)) / 2;
+      v = ((float)3/2 + (z * (float)1/2)) / 2;
     }
+
+    out.push_back(u);
+    out.push_back(v);
+    
   }
   return out;
 }

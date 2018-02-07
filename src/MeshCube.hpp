@@ -13,7 +13,7 @@ namespace IMT {
 class MeshCube: public Mesh
 {
 public:
-  MeshCube(GLfloat scale, size_t numTriangles = 2);//6*2*15*15);
+  MeshCube(GLfloat scale, size_t numTriangles = 6*2*15*15);
 
   virtual ~MeshCube() = default;
 
@@ -27,15 +27,19 @@ private:
   // we pick which element (0-2) and which polarity (-1 or
   // 1) to use.
   std::vector<GLfloat> VertexRotate(
+      GLfloat const &faceId,
       std::vector<GLfloat> const &inVec,
       std::array<size_t, 3> const &indices,
       std::array<GLfloat, 3> const &scales);
 
-  // return UV map for each vertex of the quad of normalized index (i,j) for face f.
-  std::vector<GLfloat> GetUVs(float i, float j, float numQuadsPerEdge);
+  std::vector<GLfloat> GetVertexs( std::vector<GLfloat> const& inputVertexs);
+  std::vector<GLfloat> VertexToUVs( std::vector<GLfloat> const& inputVertexs);
 
-  std::vector<GLfloat> TransposeUVs( std::vector<GLfloat> const& inputUVs,
-      size_t faceId );
+  // // return UV map for each vertex of the quad of normalized index (i,j) for face f.
+  // std::vector<GLfloat> GetUVs(float i, float j, float numQuadsPerEdge);
+
+  // std::vector<GLfloat> TransposeUVs( std::vector<GLfloat> const& inputUVs,
+  //     size_t faceId );
 
   virtual void InitImpl(void) override;
 };

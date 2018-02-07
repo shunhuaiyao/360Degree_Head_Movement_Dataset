@@ -61,11 +61,11 @@ void ConfigParser::Init(void)
   auto projectionType = pt.get<std::string>(projectionConfig+".type");
   if (projectionType == "CubeMap")
   {
-    m_outputMesh = std::make_shared<MeshCube>(5.0f);
+    m_outputMesh = std::make_shared<MeshCube>(1.0f, 6*2*30*30);
   }
   else if (projectionType == "Equirectangular")
   {
-    m_outputMesh = std::make_shared<MeshCubeEquiUV>(5.0f, 6*2*30*30);
+    m_outputMesh = std::make_shared<MeshCubeEquiUV>(1.0f, 6*2*30*30);
   }
   else
   {
