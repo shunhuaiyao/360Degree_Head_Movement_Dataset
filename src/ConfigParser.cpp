@@ -4,6 +4,7 @@
 
 #include "MeshCube.hpp"
 #include "MeshCubeEquiUV.hpp"
+#include "MeshEqualarea.hpp"
 #include "ShaderTextureStatic.hpp"
 #include "ShaderTextureVideo.hpp"
 #include "LogWriter.hpp"
@@ -66,6 +67,10 @@ void ConfigParser::Init(void)
   else if (projectionType == "Equirectangular")
   {
     m_outputMesh = std::make_shared<MeshCubeEquiUV>(1.0f, 6*2*30*30);
+  }
+  else if (projectionType == "Equalarea")
+  {
+    m_outputMesh = std::make_shared<MeshEqualarea>(1.0f, 6*2*30*30);
   }
   else
   {

@@ -71,6 +71,9 @@ class Test(object):
         fileStr += '[CubeMap]\n'
         fileStr += 'type=CubeMap\n'
         fileStr += '\n'
+        fileStr += '[Equalarea]\n'
+        fileStr += 'type=Equalarea\n'
+        fileStr += '\n'
         fileStr += '[LogWriter]\n'
         fileStr += 'outputDirPath={}\n'.format(self.logFolder)
         fileStr += 'outputId={}\n'.format(self.video.id)
