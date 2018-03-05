@@ -7,6 +7,7 @@
 
 using namespace IMT;
 constexpr float PI = 3.141592653589793238462643383279502884L;
+constexpr float BORDER = 5.0e-4;
 
 MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
 {
@@ -369,9 +370,6 @@ std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVer
     auto& x = inputVertexs[i+1];
     auto& y = inputVertexs[i+2];
     auto& z = inputVertexs[i+3];
-    auto abs_x = std::fabs(x);
-    auto abs_y = std::fabs(y);
-    auto abs_z = std::fabs(z);
     auto u = 0.0f, v = 0.0f;
 
     if(faceId == 1)
@@ -379,38 +377,49 @@ std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVer
       // back face
       u = (1 + (y * (float)1/3)) / 2;
       v = ((float)3/2 + (z * (float)1/2)) / 2;
+      v = (v == 0.5? (v+BORDER) : v);
     }
     else if (faceId == 0)
     {
       // front face
       u = (1 - (z * (float)1/3)) / 2;
       v = ((float)1/2 - (y * (float)1/2)) / 2;
+      v = (v == 0.5? (v-BORDER) : v);
     }
     else if (faceId == 5)
     {
       // left face
       u = ((float)1/3 - (x * (float)1/3)) / 2;
       v = ((float)1/2 - (y * (float)1/2)) / 2;
+      v = (v == 0.5? (v-BORDER) : v);
     }
     else if (faceId == 4)
     {
       // right face
       u = ((float)5/3 + (x * (float)1/3)) / 2;
       v = ((float)1/2 - (y * (float)1/2)) / 2;
+      v = (v == 0.5? (v-BORDER) : v);
     }
     else if (faceId == 2)
     {
       // top face
       u = ((float)5/3 - (x * (float)1/3)) / 2;
       v = ((float)3/2 + (z * (float)1/2)) / 2;
+      v = (v == 0.5? (v+BORDER) : v);
     }
     else
     {
       // bottom face
       u = ((float)1/3 + (x * (float)1/3)) / 2;
       v = ((float)3/2 + (z * (float)1/2)) / 2;
+      v = (v == 0.5? (v+BORDER) : v);
     }
 
+    u = (u == 1? (u-BORDER) : u);
+    u = (u == 0? (u+BORDER) : u);
+    v = (v == 1? (v-BORDER) : v);
+    v = (v == 0? (v+BORDER) : v);
+    
     out.push_back(u);
     out.push_back(v);
     
