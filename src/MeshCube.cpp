@@ -7,7 +7,8 @@
 
 using namespace IMT;
 constexpr float PI = 3.141592653589793238462643383279502884L;
-constexpr float BORDER = 5.0e-4;
+constexpr float U_BORDER = 3.0e-4;
+constexpr float V_BORDER = 5.0e-4;
 
 MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
 {
@@ -377,48 +378,48 @@ std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVer
       // back face
       u = (1 + (y * (float)1/3)) / 2;
       v = ((float)3/2 + (z * (float)1/2)) / 2;
-      v = (v == 0.5? (v+BORDER) : v);
+      v = (v <= 0.5+V_BORDER? (0.5+V_BORDER) : v);
     }
     else if (faceId == 0)
     {
       // front face
       u = (1 - (z * (float)1/3)) / 2;
       v = ((float)1/2 - (y * (float)1/2)) / 2;
-      v = (v == 0.5? (v-BORDER) : v);
+      v = (v >= 0.5-V_BORDER? (0.5-V_BORDER) : v);
     }
     else if (faceId == 5)
     {
       // left face
       u = ((float)1/3 - (x * (float)1/3)) / 2;
       v = ((float)1/2 - (y * (float)1/2)) / 2;
-      v = (v == 0.5? (v-BORDER) : v);
+      v = (v >= 0.5-V_BORDER? (0.5-V_BORDER) : v);
     }
     else if (faceId == 4)
     {
       // right face
       u = ((float)5/3 + (x * (float)1/3)) / 2;
       v = ((float)1/2 - (y * (float)1/2)) / 2;
-      v = (v == 0.5? (v-BORDER) : v);
+      v = (v >= 0.5-V_BORDER? (0.5-V_BORDER) : v);
     }
     else if (faceId == 2)
     {
       // top face
       u = ((float)5/3 - (x * (float)1/3)) / 2;
       v = ((float)3/2 + (z * (float)1/2)) / 2;
-      v = (v == 0.5? (v+BORDER) : v);
+      v = (v <= 0.5+V_BORDER? (0.5+V_BORDER) : v);
     }
     else
     {
       // bottom face
       u = ((float)1/3 + (x * (float)1/3)) / 2;
       v = ((float)3/2 + (z * (float)1/2)) / 2;
-      v = (v == 0.5? (v+BORDER) : v);
+      v = (v <= 0.5+V_BORDER? (0.5+V_BORDER) : v);
     }
 
-    u = (u == 1? (u-BORDER) : u);
-    u = (u == 0? (u+BORDER) : u);
-    v = (v == 1? (v-BORDER) : v);
-    v = (v == 0? (v+BORDER) : v);
+    u = (u >= 1-U_BORDER? (1-U_BORDER) : u);
+    u = (u <= 0+U_BORDER? (0+U_BORDER) : u);
+    v = (v >= 1-V_BORDER? (1-V_BORDER) : v);
+    v = (v <= 0+V_BORDER? (0+V_BORDER) : v);
     
     out.push_back(u);
     out.push_back(v);

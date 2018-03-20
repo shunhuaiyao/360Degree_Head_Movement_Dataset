@@ -5,6 +5,7 @@
 #include "MeshCube.hpp"
 #include "MeshCubeEquiUV.hpp"
 #include "MeshEqualarea.hpp"
+#include "MeshSegmentedSphere.hpp"
 #include "ShaderTextureStatic.hpp"
 #include "ShaderTextureVideo.hpp"
 #include "LogWriter.hpp"
@@ -60,7 +61,7 @@ void ConfigParser::Init(void)
   std::cout << "Parse the projection configuration: section "<< projectionConfig <<"\n";
 
   auto projectionType = pt.get<std::string>(projectionConfig+".type");
-  if (projectionType == "CubeMap")
+  if (projectionType == "CubeMap" || projectionType == "AdjustedCubeMap" || projectionType == "EquiAngularCubeMap")
   {
     m_outputMesh = std::make_shared<MeshCube>(1.0f, 6*2*30*30);
   }
@@ -71,6 +72,10 @@ void ConfigParser::Init(void)
   else if (projectionType == "Equalarea")
   {
     m_outputMesh = std::make_shared<MeshEqualarea>(1.0f, 6*2*30*30);
+  }
+  else if (projectionType == "SegmentedSphere")
+  {
+    m_outputMesh = std::make_shared<MeshSegmentedSphere>(1.0f, 6*2*1040*1040);
   }
   else
   {
