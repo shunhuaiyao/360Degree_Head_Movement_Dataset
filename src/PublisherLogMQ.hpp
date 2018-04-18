@@ -16,6 +16,7 @@ namespace IMT
   constexpr const char* FPS_INFO = "FPS_INFO";
   constexpr const char* POSITION_INFO = "POSITION_INFO";
   constexpr const char* APP_STATUS = "APP_STATUS";
+  constexpr const char* POLAR_INFO = "POLAR_INFO";
 
 class PublisherLogMQ
 {

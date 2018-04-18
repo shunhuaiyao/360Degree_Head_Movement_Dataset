@@ -102,8 +102,8 @@ class Test(object):
         commQueue.feedbackFpsQueue.put('No received feedback\n' +
                                        'No received feedback\n' +
                                        'No received feedback')
-        commQueue.feedbackPositionQueue.put('No received feedback')
-
+        commQueue.feedbackPositionQueue.put('Position: No received feedback')
+        commQueue.feedbackPolarQueue.put('[Yaw, Pitch]: No received feedback')
         iniConfParser = Helpers.GetIniConfParser()
 
         context = zmq.Context()
@@ -144,6 +144,8 @@ class Test(object):
                         commQueue.feedbackFpsQueue.put(value)
                     elif msgType == 'POSITION_INFO':
                         commQueue.feedbackPositionQueue.put(value)
+                    elif msgType == 'POLAR_INFO':
+                        commQueue.feedbackPolarQueue.put(value)
                     else:
                         self.logger.error(
                             'Unknown message type from application: {}'.format(

@@ -29,5 +29,6 @@ namespace IMT {
   inline std::ostream& operator<< (std::ostream& stream, const Quaternion& quat)
   {
     stream << quat.w() << " " << quat.x() << " " << quat.y() << " " << quat.z();
+	return stream;
   }
 }

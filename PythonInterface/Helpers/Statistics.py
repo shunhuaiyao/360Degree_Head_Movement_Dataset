@@ -23,7 +23,6 @@ import sys
 
 
 PATH_TO_STATISTIC_RESULTS = 'results/statistics'
-
 ORIGINAL_POSITION = Q.Vector(-1, 0, 0)
 
 def StoreAngularVelocity(processedResultList, filePath, isAggr):

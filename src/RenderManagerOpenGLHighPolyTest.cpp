@@ -26,6 +26,7 @@
 // limitations under the License.
 
 // Internal Includes
+#define M_PI 3.14159265358979323846
 #include <osvr/RenderKit/RenderManager.h>
 #include <osvr/ClientKit/Context.h>
 
@@ -67,7 +68,7 @@ static std::shared_ptr<Mesh> roomMesh(nullptr);
 static std::shared_ptr<LogWriter> logWriter(nullptr);
 static std::shared_ptr<PublisherLogMQ> publisherLogMQ(nullptr);
 static bool firstFrame = true;
-constexpr std::chrono::system_clock::time_point zero(std::chrono::nanoseconds(0));
+constexpr std::chrono::system_clock::time_point zero(std::chrono::microseconds(0));
 static std::chrono::system_clock::time_point global_startDisplayTime(zero);
 static size_t lastDisplayedFrame(0);
 static size_t lastNbDroppedFrame(0);
@@ -124,6 +125,29 @@ bool SetupRendering(osvr::renderkit::GraphicsLibrary library) {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     return true;
+}
+
+double ToPitch(Quaternion q) {
+	auto pitch = 0.0;
+	// pitch (y-axis rotation)
+	double sinp = +2.0 * (q.w() * q.y() - q.z() * q.x());
+	if (fabs(sinp) >= 1)
+		pitch = copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+	else
+		pitch = asin(sinp);
+	return pitch;
+}
+double ToYaw(Quaternion q) {
+	auto yaw = 0.0;
+	// yaw (z-axis rotation)
+	double siny = +2.0 * (q.w() * q.z() + q.x() * q.y());
+	double cosy = +1.0 - 2.0 * (q.y() * q.y() + q.z() * q.z());
+	yaw = atan2(siny, cosy);
+	if (yaw >= 0.0)
+		yaw = M_PI - yaw;
+	else
+		yaw = -M_PI - yaw;
+	return yaw;
 }
 
 // Callback to set up a given display, which may have one or more eyes in it
@@ -258,12 +282,14 @@ void DrawWorld(
     // }
     lastDisplayedFrame = frameInfo.m_frameDisplayId;
     lastNbDroppedFrame += frameInfo.m_nbDroppedFrame;
-    Log log(frameInfo.m_timestamp, frameInfo.m_pts, rot, frameInfo.m_frameDisplayId);
-    std::stringstream ss;
+    Log log(frameInfo.m_timestamp, frameInfo.m_pts, rot, frameInfo.m_frameDisplayId, ToYaw(rot), ToPitch(rot));
+    std::stringstream ss, polar_str;
     ss << log.GetQuaternion();
+	polar_str << log.GetYaw() << " " << log.GetPitch();
     if (frameInfo.m_frameDisplayId != size_t(-1))
     {
       publisherLogMQ->SendMessage(POSITION_INFO, ss.str());
+	  publisherLogMQ->SendMessage(POLAR_INFO, polar_str.str());
       logWriter->AddLog(std::move(log));
     }
 

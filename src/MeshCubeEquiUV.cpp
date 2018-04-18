@@ -259,6 +259,7 @@ std::vector<GLfloat> MeshCubeEquiUV::VertexRotate(
 std::vector<GLfloat> MeshCubeEquiUV::VertexToUVs( std::vector<GLfloat> const& inputVertexs)
 {
   std::vector<GLfloat> out;
+  
   //Generate Equirectangular UV map
   for(size_t i = 0; i < inputVertexs.size(); i += 3)
   {
@@ -310,60 +311,60 @@ std::vector<GLfloat> MeshCubeEquiUV::VertexToUVs( std::vector<GLfloat> const& in
         }
       }
   }
+  /*
+  for(size_t i = 0; i < inputVertexs.size(); i += 3){
+    auto& x = inputVertexs[i];
+    auto& y = inputVertexs[i+1];
+    auto& z = inputVertexs[i+2];
 
-  // for(size_t i = 0; i < inputVertexs.size(); i += 3){
-  //   auto& x = inputVertexs[i];
-  //   auto& y = inputVertexs[i+1];
-  //   auto& z = inputVertexs[i+2];
-
-  //   auto rho = std::sqrt(x*x + y*y + z*z);
-  //   auto theta = PI - std::atan2(z, x);
-  //   auto phi = std::acos(y/rho);
+	auto rho = std::sqrt(x*x + y*y + z*z);
+	auto theta = std::atan2(z, x) + PI;
+	auto phi = std::acos(y / rho);
     
-  //   auto u = -(theta / (2*PI));
-  //   auto v = (phi / PI);
-  //   out.push_back(u);
-  //   out.push_back(v);
-  // }
+    auto u = theta / (2*PI);
+    auto v = (phi / PI);
+    out.push_back(u);
+    out.push_back(v);
+  }
   
-  // //Check if two vertix are at opposite side of the texture
-  // for(size_t i = 0; i < out.size(); i += 6)
-  // {
-  //     if (std::abs(out[i] - out[i+2]) > 0.7)
-  //     {
-  //       if (out[i] < 0.3)
-  //       {
-  //         out[i] += 1.f;
-  //       }
-  //       else
-  //       {
-  //         out[i+2] += 1.f;
-  //       }
-  //     }
-  //     if (std::abs(out[i] - out[i+4]) > 0.7)
-  //     {
-  //       if (out[i] < 0.3)
-  //       {
-  //         out[i] += 1.f;
-  //       }
-  //       else
-  //       {
-  //         out[i+4] += 1.f;
-  //       }
-  //     }
-  //     if (std::abs(out[i+2] - out[i+4]) > 0.7)
-  //     {
-  //       if (out[i+2] < 0.3)
-  //       {
-  //         out[i+2] += 1.f;
-  //       }
-  //       else
-  //       {
-  //         out[i+4] += 1.f;
-  //       }
-  //     }
-  // }
-
+  //Check if two vertix are at opposite side of the texture
+  for(size_t i = 0; i < out.size(); i += 6)
+  {
+      if (std::abs(out[i] - out[i+2]) > 0.7)
+      {
+        if (out[i] < 0.3)
+        {
+          out[i] += 1.f;
+        }
+        else
+        {
+          out[i+2] += 1.f;
+        }
+      }
+      if (std::abs(out[i] - out[i+4]) > 0.7)
+      {
+        if (out[i] < 0.3)
+        {
+          out[i] += 1.f;
+        }
+        else
+        {
+          out[i+4] += 1.f;
+        }
+      }
+      if (std::abs(out[i+2] - out[i+4]) > 0.7)
+      {
+        if (out[i+2] < 0.3)
+        {
+          out[i+2] += 1.f;
+        }
+        else
+        {
+          out[i+4] += 1.f;
+        }
+      }
+  }
+  */
   return out;
 }
 

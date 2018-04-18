@@ -34,7 +34,7 @@ public:
     return o;
   }
 
-  auto ToSpherical(void) const
+  boost::python::tuple ToSpherical(void) const
   {
     auto theta = std::atan2(m_y, m_x);
     auto phi = std::acos(m_z/Norm());
@@ -47,9 +47,9 @@ public:
     return Vector(sinP*std::cos(theta), sinP*std::sin(theta), std::cos(phi));
   }
 
-  auto GetX(void) const {return m_x;}
-  auto GetY(void) const {return m_y;}
-  auto GetZ(void) const {return m_z;}
+  SCALAR GetX(void) const {return m_x;}
+  SCALAR GetY(void) const {return m_y;}
+  SCALAR GetZ(void) const {return m_z;}
 private:
   SCALAR m_x;
   SCALAR m_y;
@@ -138,8 +138,8 @@ public:
     }
   }
 
-  auto GetW(void) const {return m_w;}
-  auto GetV(void) const {return m_v;}
+  SCALAR GetW(void) const {return m_w;}
+  Vector GetV(void) const {return m_v;}
 
   bool IsPur(void) const {return m_w == 0;}
   Quaternion Conj(void) const {return Quaternion(m_w, -m_v);}
@@ -339,7 +339,7 @@ boost::python::dict ComputeMaxOrthodromicDistances(boost::python::dict& filtered
   return outputDict;
 }
 
-constexpr SCALAR PI = 3.141592653589793238L;
+const SCALAR PI = 3.141592653589793238L;
 
 boost::python::list ComputeVision(boost::python::dict& filteredQuaternions,
     size_t width, size_t height, SCALAR horizontalFoVAngle, SCALAR verticalFoVAngle)

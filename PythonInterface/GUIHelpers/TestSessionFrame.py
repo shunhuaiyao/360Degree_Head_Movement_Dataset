@@ -21,16 +21,18 @@ class CommunicationQueues(object):
     """Class used for the working thread to communicat with tkinter."""
 
     def __init__(self, nameLabel, statusLabel, feedbackFpsLabel,
-                 feedbackPositionLabel):
+                 feedbackPositionLabel, feedbackPolarLabel):
         """init function."""
         self.nameQueue = queue.Queue()
         self.statusQueue = queue.Queue()
         self.feedbackFpsQueue = queue.Queue()
         self.feedbackPositionQueue = queue.Queue()
+        self.feedbackPolarQueue = queue.Queue()
         self.nameLabel = nameLabel
         self.statusLabel = statusLabel
         self.feedbackFpsLabel = feedbackFpsLabel
         self.feedbackPositionLabel = feedbackPositionLabel
+        self.feedbackPolarLabel = feedbackPolarLabel
         self.done = False
         self.stop = False
         self.__allEmpty = True
@@ -53,6 +55,8 @@ class CommunicationQueues(object):
         self.__ProcessQueue(self.feedbackFpsQueue, self.feedbackFpsLabel)
         self.__ProcessQueue(self.feedbackPositionQueue,
                             self.feedbackPositionLabel)
+        self.__ProcessQueue(self.feedbackPolarQueue,
+                            self.feedbackPolarLabel)
         if not self.done and not self.stop:
             if self.__allEmpty:
                 GetRootFrame().after(
@@ -138,6 +142,12 @@ class TestSessionFrame(Frame):
                   )
         self.testFeedbackPosition.grid(row=5, column=0)
 
+        self.testFeedbackPolar = \
+            Label(self,
+                  text=''
+                  )
+        self.testFeedbackPolar.grid(row=6, column=0)
+
         exitManager = GetExitManager()
         self.exitCallbackId = \
             exitManager.AddCallback(partial(self.ExitCallback))
@@ -166,7 +176,8 @@ class TestSessionFrame(Frame):
                 self.commQueue = CommunicationQueues(self.testName,
                                                      self.testStatus,
                                                      self.testFeedbackFps,
-                                                     self.testFeedbackPosition)
+                                                     self.testFeedbackPosition,
+                                                     self.testFeedbackPolar)
                 self.workingThread = threading.Thread(
                     target=partial(self.currentTest.Run, self.commQueue)
                     )
@@ -181,6 +192,7 @@ class TestSessionFrame(Frame):
                 self.testStatus.grid_forget()
                 self.testFeedbackFps.grid_forget()
                 self.testFeedbackPosition.grid_forget()
+                self.testFeedbackPolar.grid_forget()
                 self.stopButton.grid_forget()
 
                 self.quitButton = Button(self,

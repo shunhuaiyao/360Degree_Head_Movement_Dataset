@@ -53,6 +53,7 @@ public:
   {
     stream << timestamp.GetSec() <<"." << std::setw(6) << std::setfill('0')
       << std::right << timestamp.GetMicrosec();
+	return stream;
   }
 private:
   long m_seconds;

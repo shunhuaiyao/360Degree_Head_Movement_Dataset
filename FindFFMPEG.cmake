@@ -33,6 +33,7 @@ FIND_PROGRAM( FFMPEG_CONFIG ffmpeg-config
   /usr/local/bin
   ${HOME}/bin
 )
+MESSAGE( STATUS "HOME:         " ${HOME} )
 
 IF( FFMPEG_CONFIG )
   EXEC_PROGRAM( ${FFMPEG_CONFIG} ARGS "--libs avformat" OUTPUT_VARIABLE FFMPEG_LIBS )
