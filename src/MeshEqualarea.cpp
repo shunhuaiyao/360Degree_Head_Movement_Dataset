@@ -199,6 +199,7 @@ std::vector<GLfloat> MeshEqualarea::VertexToUVs( std::vector<GLfloat> const& inp
   }
 
   //Check if two vertix are at opposite side of the texture
+  
   for(size_t i = 0; i < out.size(); i += 6)
   {
       if (std::abs(out[i] - out[i+2]) > 0.7)
@@ -235,7 +236,7 @@ std::vector<GLfloat> MeshEqualarea::VertexToUVs( std::vector<GLfloat> const& inp
         }
       }
   }
-
+  
   return out;
 }
 

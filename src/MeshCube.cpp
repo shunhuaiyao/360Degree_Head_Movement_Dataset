@@ -74,12 +74,12 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
   std::vector<GLfloat> tmpVertexBufferData;
   
 
-  // left face
+  // right face
   // +Z is blue and is in the same location as the original
   // faces.
   {
     // X = X, Y = Y, Z = Z
-    auto faceId = 5;
+    auto faceId = 4;
     std::array<GLfloat, 3> scales = { 1.0f, 1.0f, 1.0f };
     std::array<size_t, 3> indices = { 0, 1, 2 };
     std::vector<GLfloat> myFaceBufferData =
@@ -87,7 +87,6 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
 
     tmpVertexBufferData.insert(tmpVertexBufferData.end(),
       myFaceBufferData.begin(), myFaceBufferData.end());
-    
     // out.push_back((float)1/3);
     // out.push_back(0.0);
     // out.push_back((float)1/3);
@@ -103,12 +102,12 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
     
   }
 
-  // right face
+  // left face
   // -Z is cyan and is in the opposite size from the
   // original face (mirror all 3).
   {
     // X = -X, Y = -Y, Z = -Z
-    auto faceId = 4;
+    auto faceId = 5;
     std::array<GLfloat, 3> scales = { -1.0f, -1.0f, -1.0f };
     std::array<size_t, 3> indices = { 0, 1, 2 };
     std::vector<GLfloat> myFaceBufferData =
@@ -116,7 +115,6 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
 
     tmpVertexBufferData.insert(tmpVertexBufferData.end(),
       myFaceBufferData.begin(), myFaceBufferData.end());
-
     // out.push_back(1.0);
     // out.push_back(0.5);
     // out.push_back(1.0);
@@ -132,12 +130,12 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
    
   }
 
-  // back face
+  // front face
   // +X is red and is rotated -90 degrees from the original
   // around Y.
   {
     // X = Z, Y = Y, Z = -X
-    auto faceId = 1;
+    auto faceId = 0;
     std::array<GLfloat, 3> scales = { 1.0f, 1.0f, -1.0f };
     std::array<size_t, 3> indices = { 2, 1, 0 };
     std::vector<GLfloat> myFaceBufferData =
@@ -145,7 +143,6 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
 
     tmpVertexBufferData.insert(tmpVertexBufferData.end(),
       myFaceBufferData.begin(), myFaceBufferData.end());
-
     // out.push_back((float)2/3);
     // out.push_back(1.0);
     // out.push_back((float)1/3);
@@ -161,12 +158,12 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
     
   }
 
-  // front face
+  // back face
   // -X is magenta and is rotated 90 degrees from the original
   // around Y.
   {
     // X = -Z, Y = Y, Z = X
-    auto faceId = 0;
+    auto faceId = 1;
     std::array<GLfloat, 3> scales = { -1.0f, 1.0f, 1.0f };
     std::array<size_t, 3> indices = { 2, 1, 0 };
     std::vector<GLfloat> myFaceBufferData =
@@ -174,7 +171,6 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
 
     tmpVertexBufferData.insert(tmpVertexBufferData.end(),
       myFaceBufferData.begin(), myFaceBufferData.end());
-
     // out.push_back((float)2/3);
     // out.push_back(0.0);
     // out.push_back((float)2/3);
@@ -203,7 +199,6 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
 
     tmpVertexBufferData.insert(tmpVertexBufferData.end(),
       myFaceBufferData.begin(), myFaceBufferData.end());
-
     // out.push_back(1.0);
     // out.push_back(0.5);
     // out.push_back(1.0);
@@ -233,7 +228,6 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
 
     tmpVertexBufferData.insert(tmpVertexBufferData.end(),
       myFaceBufferData.begin(), myFaceBufferData.end());
-
     // out.push_back(0.0);
     // out.push_back(1.0);
     // out.push_back(0.0);
@@ -377,42 +371,42 @@ std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVer
     {
       // back face
       u = (1 + (y * (float)1/3)) / 2;
-      v = ((float)3/2 + (z * (float)1/2)) / 2;
+      v = ((float)3/2 - (z * (float)1/2)) / 2;
       v = (v <= 0.5+V_BORDER? (0.5+V_BORDER) : v);
     }
     else if (faceId == 0)
     {
       // front face
-      u = (1 - (z * (float)1/3)) / 2;
+      u = (1 + (z * (float)1/3)) / 2;
       v = ((float)1/2 - (y * (float)1/2)) / 2;
       v = (v >= 0.5-V_BORDER? (0.5-V_BORDER) : v);
     }
     else if (faceId == 5)
     {
       // left face
-      u = ((float)1/3 - (x * (float)1/3)) / 2;
+      u = ((float)1/3 + (x * (float)1/3)) / 2;
       v = ((float)1/2 - (y * (float)1/2)) / 2;
       v = (v >= 0.5-V_BORDER? (0.5-V_BORDER) : v);
     }
     else if (faceId == 4)
     {
       // right face
-      u = ((float)5/3 + (x * (float)1/3)) / 2;
+      u = ((float)5/3 - (x * (float)1/3)) / 2;
       v = ((float)1/2 - (y * (float)1/2)) / 2;
       v = (v >= 0.5-V_BORDER? (0.5-V_BORDER) : v);
     }
     else if (faceId == 2)
     {
       // top face
-      u = ((float)5/3 - (x * (float)1/3)) / 2;
-      v = ((float)3/2 + (z * (float)1/2)) / 2;
+      u = ((float)5/3 + (x * (float)1/3)) / 2;
+      v = ((float)3/2 - (z * (float)1/2)) / 2;
       v = (v <= 0.5+V_BORDER? (0.5+V_BORDER) : v);
     }
     else
     {
       // bottom face
-      u = ((float)1/3 + (x * (float)1/3)) / 2;
-      v = ((float)3/2 + (z * (float)1/2)) / 2;
+      u = ((float)1/3 - (x * (float)1/3)) / 2;
+      v = ((float)3/2 - (z * (float)1/2)) / 2;
       v = (v <= 0.5+V_BORDER? (0.5+V_BORDER) : v);
     }
 
