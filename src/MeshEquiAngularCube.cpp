@@ -1,16 +1,16 @@
 //Author: Xavier Corbillon
 //IMT Atlantique
-#include "MeshCube.hpp"
+#include "MeshEquiAngularCube.hpp"
 #include <iostream>
 //standard includes
 #include <cmath>
 
 using namespace IMT;
 constexpr float PI = 3.141592653589793238462643383279502884L;
-constexpr float U_BORDER = 3.0e-4;
-constexpr float V_BORDER = 5.0e-4;
+constexpr float U_BORDER = 2.25e-4;
+constexpr float V_BORDER = 3.75e-4;
 
-MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
+MeshEquiAngularCube::MeshEquiAngularCube(GLfloat scale, size_t numTriangles): Mesh()
 {
   // Figure out how many quads we have per edge.  There
   // is a minimum of 1.
@@ -245,77 +245,10 @@ MeshCube::MeshCube(GLfloat scale, size_t numTriangles): Mesh()
 
   AppendVertexBufferData(GetVertexs(tmpVertexBufferData));
   AppendUvBufferData(VertexToUVs(tmpVertexBufferData));
-
-  // std::vector<GLfloat> tmpVertexBufferData;
-  // int slices = 3600;
-  // int layercuts = 1800;
-  // float x, y, z, u, v, d; //d=diameter of circle at height y
-  // float theta; //theta used for angle about y axis
-  // float phi = 0.0f; //phi used for angle to determine y and d.
-  // float thetad = 2 * PI / slices; //theta delta
-  // float phid = PI / (layercuts + 1); //phi delta
-  // //NumVertices = (slices * layercuts) + 2;
-  // //NumIndices = ((slices + 2) * 2) + ((layercuts - 1) * (slices + 1) * 2);
-  // float tmpVertex[3] = {0.0f, 1.0f, 0.0f};
-  // tmpVertexBufferData.insert(tmpVertexBufferData.end(), tmpVertex, tmpVertex+3);
-
-  // for (unsigned int i = 0; i < layercuts; i++) {
-  //   y = std::cos(phi);
-  //   d = std::sin(phi);
-  //   theta = 0.0f;
-  //   for (unsigned int j = 0; j < slices; j++) {
-  //     x = std::sin(theta) * d;
-  //     z = std::cos(theta) * d;
-  //     u = 0.5f + (std::atan2(z, x) / (2 * PI));
-  //     v = 0.5f - (std::asin(y) / PI);
-  //     //vertices[(i * slices) + j + 1] = { { x / 2, y / 2, z / 2 },{ u, v },{ 1.0f, 1.0f, 1.0f },{ x, y, z } };
-  //     tmpVertex[0] = x;
-  //     tmpVertex[1] = y;
-  //     tmpVertex[2] = z;
-  //     tmpVertexBufferData.insert(tmpVertexBufferData.end(), tmpVertex, tmpVertex+3);
-  //     theta += thetad;
-  //   }
-  //   phi += phid;
-  // }
-
-  // tmpVertex[0] = 0.0f;
-  // tmpVertex[1] = -1.0f;
-  // tmpVertex[2] = 0.0f;
-  // tmpVertexBufferData.insert(tmpVertexBufferData.end(), tmpVertex, tmpVertex+3);
-  // AppendVertexBufferData(tmpVertexBufferData);
-  // AppendUvBufferData(VertexToUVs(tmpVertexBufferData));
-
-  // std::vector<GLfloat> vertices;
-  // int lats = 1000;
-  // int longs = 1000;
-  // for(int i = 0; i <= lats; i++) {
-  //   double lat0 = PI * (-0.5 + (double) (i - 1) / lats);
-  //   double z0  = sin(lat0);
-  //   double zr0 =  cos(lat0);
-
-  //   double lat1 = PI * (-0.5 + (double) i / lats);
-  //   double z1 = sin(lat1);
-  //   double zr1 = cos(lat1);
-
-  //   for(int j = 0; j <= longs; j++) {
-  //     double lng = 2 * PI * (double) (j - 1) / longs;
-  //     double x = cos(lng);
-  //     double y = sin(lng);
-  //     vertices.push_back(x * zr0);
-  //     vertices.push_back(y * zr0);
-  //     vertices.push_back(z0);
-         
-  //     vertices.push_back(x * zr1);
-  //     vertices.push_back(y * zr1);
-  //     vertices.push_back(z1);
-  //   }
-  // }
-  // AppendVertexBufferData(vertices);
-  // AppendUvBufferData(VertexToUVs(vertices));
 }
 
 
-std::vector<GLfloat> MeshCube::VertexRotate(
+std::vector<GLfloat> MeshEquiAngularCube::VertexRotate(
     GLfloat const &faceId,
     std::vector<GLfloat> const &inVec,
     std::array<size_t, 3> const &indices,
@@ -338,7 +271,7 @@ std::vector<GLfloat> MeshCube::VertexRotate(
   return out;
 }
 
-std::vector<GLfloat> MeshCube::GetVertexs( std::vector<GLfloat> const& inputVertexs)
+std::vector<GLfloat> MeshEquiAngularCube::GetVertexs( std::vector<GLfloat> const& inputVertexs)
 {
   std::vector<GLfloat> out;
   for (size_t i = 0; i < inputVertexs.size(); i += 4)
@@ -354,7 +287,7 @@ std::vector<GLfloat> MeshCube::GetVertexs( std::vector<GLfloat> const& inputVert
 }
 
 
-std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVertexs)
+std::vector<GLfloat> MeshEquiAngularCube::VertexToUVs( std::vector<GLfloat> const& inputVertexs)
 {
   std::vector<GLfloat> out;
 
@@ -372,16 +305,68 @@ std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVer
 		// back face
 		u = (10 + (y * (float)1 / 3)) / 20;
 		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
-		u = (u >= (float)2 / 3 - U_BORDER ? (float)2 / 3 - U_BORDER : u);
-		u = (u <= (float)1 / 3 + U_BORDER ? (float)1 / 3 + U_BORDER : u);
-		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
-		
+		u = u - (float)1 / 3;
+		v = v - (float)1 / 2;
 	}
 	else if (faceId == 0)
 	{
 		// front face
 		u = (10 + (z * (float)1 / 3)) / 20;
 		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
+		u = u - (float)1 / 3;
+	}
+	else if (faceId == 5)
+	{
+		// left face
+		u = ((float)10 / 3 + (x * (float)1 / 3)) / 20;
+		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
+	}
+	else if (faceId == 4)
+	{
+		// right face
+		u = ((float)50 / 3 - (x * (float)1 / 3)) / 20;
+		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
+		u = u - (float)2 / 3;
+	}
+	else if (faceId == 2)
+	{
+		// top face
+		u = ((float)50 / 3 + (x * (float)1 / 3)) / 20;
+		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
+		u = u - (float)2 / 3;
+		v = v - (float)1 / 2;
+	}
+	else
+	{
+		// bottom face
+		u = ((float)10 / 3 - (x * (float)1 / 3)) / 20;
+		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
+		v = v - (float)1 / 2;
+	}
+
+	// u:[0, 1/3] v:[0, 1/2] -> u:[-1, 1] v:[-1, 1]
+	u = 6.0 * u - 1;
+	v = 4.0 * v - 1;
+	// re-sampling for EAC by CMP
+	u = 4.0/PI * std::atan(u);
+	v = 4.0/PI * std::atan(v);
+	// u:[-1, 1] v:[-1, 1] -> u:[0, 1/3] v:[0, 1/2]
+	u = (u + 1) / 6.0;
+	v = (v + 1) / 4.0;
+
+	if (faceId == 1)
+	{
+		// back face
+		u = u + (float)1 / 3;
+		v = v + (float)1 / 2;
+		u = (u >= (float)2 / 3 - U_BORDER ? (float)2 / 3 - U_BORDER : u);
+		u = (u <= (float)1 / 3 + U_BORDER ? (float)1 / 3 + U_BORDER : u);
+		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
+	}
+	else if (faceId == 0)
+	{
+		// front face
+		u = u + (float)1 / 3;
 		u = (u >= (float)2 / 3 - U_BORDER ? (float)2 / 3 - U_BORDER : u);
 		u = (u <= (float)1 / 3 + U_BORDER ? (float)1 / 3 + U_BORDER : u);
 		v = (v >= 0.5 - V_BORDER ? (0.5 - V_BORDER) : v);
@@ -389,32 +374,28 @@ std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVer
 	else if (faceId == 5)
 	{
 		// left face
-		u = ((float)10 / 3 + (x * (float)1 / 3)) / 20;
-		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
 		u = (u >= (float)1 / 3 - U_BORDER ? (float)1 / 3 - U_BORDER : u);
 		v = (v >= 0.5 - V_BORDER ? (0.5 - V_BORDER) : v);
 	}
 	else if (faceId == 4)
 	{
 		// right face
-		u = ((float)50 / 3 - (x * (float)1 / 3)) / 20;
-		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
+		u = u + (float)2 / 3;
 		u = (u <= (float)2 / 3 + U_BORDER ? (float)2 / 3 + U_BORDER : u);
 		v = (v >= 0.5 - V_BORDER ? (0.5 - V_BORDER) : v);
 	}
 	else if (faceId == 2)
 	{
 		// top face
-		u = ((float)50 / 3 + (x * (float)1 / 3)) / 20;
-		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
+		u = u + (float)2 / 3;
+		v = v + (float)1 / 2;
 		u = (u <= (float)2 / 3 + U_BORDER ? (float)2 / 3 + U_BORDER : u);
 		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
 	}
 	else
 	{
 		// bottom face
-		u = ((float)10 / 3 - (x * (float)1 / 3)) / 20;
-		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
+		v = v + (float)1 / 2;
 		u = (u >= (float)1 / 3 - U_BORDER ? (float)1 / 3 - U_BORDER : u);
 		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
 	}
@@ -431,7 +412,7 @@ std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVer
   return out;
 }
 
-void MeshCube::InitImpl(void)
+void MeshEquiAngularCube::InitImpl(void)
 {
   // UV
   glBindBuffer(GL_ARRAY_BUFFER, GetUvBufferId());

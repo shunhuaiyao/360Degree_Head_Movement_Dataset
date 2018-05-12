@@ -163,7 +163,7 @@ void VideoReader::Init(unsigned nbFrames)
 			{
 				std::cout << "Could not find the decoder for stream id " << i << std::endl;
 			}
-			PRINT_DEBUG_VideoReader("decoder: " << decoder->long_name);
+			std::cout << "decoder: " << decoder->long_name << std::endl;
 			PRINT_DEBUG_VideoReader("Init decoder for stream id " << i);
 			m_video_codec_ctx = avcodec_alloc_context3(decoder);
 			if ((ret = avcodec_parameters_to_context(m_video_codec_ctx, m_fmt_ctx->streams[i]->codecpar)) < 0) {

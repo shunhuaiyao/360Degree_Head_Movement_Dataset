@@ -3,6 +3,7 @@
 #include "ConfigParser.hpp"
 
 #include "MeshCube.hpp"
+#include "MeshEquiAngularCube.hpp"
 #include "MeshCubeEquiUV.hpp"
 #include "MeshEqualarea.hpp"
 #include "MeshSegmentedSphere.hpp"
@@ -61,21 +62,25 @@ void ConfigParser::Init(void)
   std::cout << "Parse the projection configuration: section "<< projectionConfig <<"\n";
 
   auto projectionType = pt.get<std::string>(projectionConfig+".type");
-  if (projectionType == "CubeMap" || projectionType == "AdjustedCubeMap" || projectionType == "EquiAngularCubeMap")
+  if (projectionType == "CubeMap" || projectionType == "AdjustedCubeMap")
   {
-    m_outputMesh = std::make_shared<MeshCube>(1.0f, 6*2*30*30);
+    m_outputMesh = std::make_shared<MeshCube>(10.0f, 6*2*30*30);
+  }
+  else if (projectionType == "EquiAngularCubeMap")
+  {
+	m_outputMesh = std::make_shared<MeshEquiAngularCube>(10.0f, 6*2*30*30);
   }
   else if (projectionType == "Equirectangular")
   {
-    m_outputMesh = std::make_shared<MeshCubeEquiUV>(1.0f, 6*2*30*30);
+    m_outputMesh = std::make_shared<MeshCubeEquiUV>(10.0f, 6*2*30*30);
   }
   else if (projectionType == "Equalarea")
   {
-    m_outputMesh = std::make_shared<MeshEqualarea>(1.0f, 6*2*30*30);
+    m_outputMesh = std::make_shared<MeshEqualarea>(10.0f, 6*2*30*30);
   }
   else if (projectionType == "SegmentedSphere")
   {
-    m_outputMesh = std::make_shared<MeshSegmentedSphere>(1.0f, 6*2*1040*1040);
+    m_outputMesh = std::make_shared<MeshSegmentedSphere>(10.0f, 6*2*1040*1040);
   }
   else
   {
