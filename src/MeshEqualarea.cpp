@@ -2,7 +2,6 @@
 //IMT Atlantique
 #include "MeshEqualarea.hpp"
 #include <iostream>
-
 //standard includes
 #include <cmath>
 
@@ -182,7 +181,6 @@ std::vector<GLfloat> MeshEqualarea::VertexRotate(
 std::vector<GLfloat> MeshEqualarea::VertexToUVs( std::vector<GLfloat> const& inputVertexs)
 {
   std::vector<GLfloat> out;
-
   //Generate Equalarea UV map
   for(size_t i = 0; i < inputVertexs.size(); i += 3)
   {
@@ -236,7 +234,6 @@ std::vector<GLfloat> MeshEqualarea::VertexToUVs( std::vector<GLfloat> const& inp
         }
       }
   }
-  
   return out;
 }
 

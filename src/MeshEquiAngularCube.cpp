@@ -276,12 +276,13 @@ std::vector<GLfloat> MeshEquiAngularCube::GetVertexs( std::vector<GLfloat> const
   std::vector<GLfloat> out;
   for (size_t i = 0; i < inputVertexs.size(); i += 4)
   {
+	auto& faceID = inputVertexs[i];
     auto& x = inputVertexs[i+1];
     auto& y = inputVertexs[i+2];
     auto& z = inputVertexs[i+3];
     out.push_back(x);
     out.push_back(y);
-    out.push_back(z);
+    out.push_back(z);	
   }
   return out;
 }
@@ -290,7 +291,6 @@ std::vector<GLfloat> MeshEquiAngularCube::GetVertexs( std::vector<GLfloat> const
 std::vector<GLfloat> MeshEquiAngularCube::VertexToUVs( std::vector<GLfloat> const& inputVertexs)
 {
   std::vector<GLfloat> out;
-
   //Generate CubeMap UV map
   for(size_t i = 0; i < inputVertexs.size(); i += 4){
     
@@ -299,104 +299,89 @@ std::vector<GLfloat> MeshEquiAngularCube::VertexToUVs( std::vector<GLfloat> cons
     auto& y = inputVertexs[i+2];
     auto& z = inputVertexs[i+3];
     auto u = 0.0f, v = 0.0f;
-
+	
 	if (faceId == 1)
 	{
 		// back face
-		u = (10 + (y * (float)1 / 3)) / 20;
-		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
-		u = u - (float)1 / 3;
-		v = v - (float)1 / 2;
+		u = y / abs(x);
+		v = -z / abs(x);
 	}
 	else if (faceId == 0)
 	{
 		// front face
-		u = (10 + (z * (float)1 / 3)) / 20;
-		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
-		u = u - (float)1 / 3;
+		u = -z / abs(x);
+		v = -y / abs(x);
 	}
 	else if (faceId == 5)
 	{
 		// left face
-		u = ((float)10 / 3 + (x * (float)1 / 3)) / 20;
-		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
+		u = -x / abs(z);
+		v = -y / abs(z);
 	}
 	else if (faceId == 4)
 	{
 		// right face
-		u = ((float)50 / 3 - (x * (float)1 / 3)) / 20;
-		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
-		u = u - (float)2 / 3;
+		u = x / abs(z);
+		v = -y / abs(z);
 	}
 	else if (faceId == 2)
 	{
 		// top face
-		u = ((float)50 / 3 + (x * (float)1 / 3)) / 20;
-		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
-		u = u - (float)2 / 3;
-		v = v - (float)1 / 2;
+		u = x / abs(y);
+		v = z / abs(y);
 	}
 	else
 	{
 		// bottom face
-		u = ((float)10 / 3 - (x * (float)1 / 3)) / 20;
-		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
-		v = v - (float)1 / 2;
+		u = x / abs(y);
+		v = -z / abs(y);
 	}
 
-	// u:[0, 1/3] v:[0, 1/2] -> u:[-1, 1] v:[-1, 1]
-	u = 6.0 * u - 1;
-	v = 4.0 * v - 1;
-	// re-sampling for EAC by CMP
-	u = 4.0/PI * std::atan(u);
-	v = 4.0/PI * std::atan(v);
-	// u:[-1, 1] v:[-1, 1] -> u:[0, 1/3] v:[0, 1/2]
-	u = (u + 1) / 6.0;
-	v = (v + 1) / 4.0;
+	u = 4.0 / PI * std::atan(u);
+	v = 4.0 / PI * std::atan(v);
 
+	u = (u + 1.0) / 2.0;
+	v = (v + 1.0) / 2.0;
 	if (faceId == 1)
 	{
 		// back face
-		u = u + (float)1 / 3;
-		v = v + (float)1 / 2;
-		u = (u >= (float)2 / 3 - U_BORDER ? (float)2 / 3 - U_BORDER : u);
-		u = (u <= (float)1 / 3 + U_BORDER ? (float)1 / 3 + U_BORDER : u);
+		u = u / 3.0 + 1.0 / 3.0;
+		v = v / 2.0 + 0.5;
 		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
 	}
 	else if (faceId == 0)
 	{
 		// front face
-		u = u + (float)1 / 3;
-		u = (u >= (float)2 / 3 - U_BORDER ? (float)2 / 3 - U_BORDER : u);
-		u = (u <= (float)1 / 3 + U_BORDER ? (float)1 / 3 + U_BORDER : u);
+		u = -u / 3.0 + 2.0 / 3.0;
+		v = v / 2.0;
 		v = (v >= 0.5 - V_BORDER ? (0.5 - V_BORDER) : v);
 	}
 	else if (faceId == 5)
 	{
 		// left face
-		u = (u >= (float)1 / 3 - U_BORDER ? (float)1 / 3 - U_BORDER : u);
+		u = -u / 3.0 + 1.0 / 3.0;
+		v = v / 2.0;
 		v = (v >= 0.5 - V_BORDER ? (0.5 - V_BORDER) : v);
 	}
 	else if (faceId == 4)
 	{
 		// right face
-		u = u + (float)2 / 3;
-		u = (u <= (float)2 / 3 + U_BORDER ? (float)2 / 3 + U_BORDER : u);
+		u = -u / 3.0 + 1.0;
+		v = v / 2.0;
 		v = (v >= 0.5 - V_BORDER ? (0.5 - V_BORDER) : v);
 	}
 	else if (faceId == 2)
 	{
 		// top face
-		u = u + (float)2 / 3;
-		v = v + (float)1 / 2;
-		u = (u <= (float)2 / 3 + U_BORDER ? (float)2 / 3 + U_BORDER : u);
+		u = u / 3.0 + 2.0 / 3.0;
+		v = -v / 2.0 + 1.0;
 		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
 	}
 	else
 	{
 		// bottom face
-		v = v + (float)1 / 2;
-		u = (u >= (float)1 / 3 - U_BORDER ? (float)1 / 3 - U_BORDER : u);
+		u = -u / 3.0 + 1.0 / 3.0;
+		v = v / 2.0 + 0.5;
 		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
 	}
 
@@ -404,7 +389,7 @@ std::vector<GLfloat> MeshEquiAngularCube::VertexToUVs( std::vector<GLfloat> cons
 	u = (u <= 0 + U_BORDER ? (0 + U_BORDER) : u);
 	v = (v >= 1 - V_BORDER ? (1 - V_BORDER) : v);
 	v = (v <= 0 + V_BORDER ? (0 + V_BORDER) : v);
-
+	
     out.push_back(u);
     out.push_back(v);
     

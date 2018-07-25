@@ -343,6 +343,7 @@ std::vector<GLfloat> MeshCube::GetVertexs( std::vector<GLfloat> const& inputVert
   std::vector<GLfloat> out;
   for (size_t i = 0; i < inputVertexs.size(); i += 4)
   {
+	auto& faceID = inputVertexs[i];
     auto& x = inputVertexs[i+1];
     auto& y = inputVertexs[i+2];
     auto& z = inputVertexs[i+3];
@@ -357,7 +358,6 @@ std::vector<GLfloat> MeshCube::GetVertexs( std::vector<GLfloat> const& inputVert
 std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVertexs)
 {
   std::vector<GLfloat> out;
-
   //Generate CubeMap UV map
   for(size_t i = 0; i < inputVertexs.size(); i += 4){
     
@@ -370,52 +370,81 @@ std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVer
 	if (faceId == 1)
 	{
 		// back face
-		u = (10 + (y * (float)1 / 3)) / 20;
-		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
-		u = (u >= (float)2 / 3 - U_BORDER ? (float)2 / 3 - U_BORDER : u);
-		u = (u <= (float)1 / 3 + U_BORDER ? (float)1 / 3 + U_BORDER : u);
-		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
-		
+		u = y / abs(x);
+		v = -z / abs(x);
 	}
 	else if (faceId == 0)
 	{
 		// front face
-		u = (10 + (z * (float)1 / 3)) / 20;
-		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
-		u = (u >= (float)2 / 3 - U_BORDER ? (float)2 / 3 - U_BORDER : u);
-		u = (u <= (float)1 / 3 + U_BORDER ? (float)1 / 3 + U_BORDER : u);
+		u = -z / abs(x);
+		v = -y / abs(x);
+	}
+	else if (faceId == 5)
+	{
+		// left face
+		u = -x / abs(z);
+		v = -y / abs(z);
+	}
+	else if (faceId == 4)
+	{
+		// right face
+		u = x / abs(z);
+		v = -y / abs(z);
+	}
+	else if (faceId == 2)
+	{
+		// top face
+		u = x / abs(y);
+		v = z / abs(y);
+	}
+	else
+	{
+		// bottom face
+		u = x / abs(y);
+		v = -z / abs(y);
+	}
+	u = (u + 1.0) / 2.0;
+	v = (v + 1.0) / 2.0;
+	if (faceId == 1)
+	{
+		// back face
+		u = u / 3.0 + 1.0 / 3.0;
+		v = v / 2.0 + 0.5;
+		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
+	}
+	else if (faceId == 0)
+	{
+		// front face
+		u = -u / 3.0 + 2.0 / 3.0;
+		v = v / 2.0;
 		v = (v >= 0.5 - V_BORDER ? (0.5 - V_BORDER) : v);
 	}
 	else if (faceId == 5)
 	{
 		// left face
-		u = ((float)10 / 3 + (x * (float)1 / 3)) / 20;
-		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
-		u = (u >= (float)1 / 3 - U_BORDER ? (float)1 / 3 - U_BORDER : u);
+		u = -u / 3.0 + 1.0 / 3.0; 
+		v = v / 2.0;
 		v = (v >= 0.5 - V_BORDER ? (0.5 - V_BORDER) : v);
 	}
 	else if (faceId == 4)
 	{
 		// right face
-		u = ((float)50 / 3 - (x * (float)1 / 3)) / 20;
-		v = ((float)10 / 2 - (y * (float)1 / 2)) / 20;
-		u = (u <= (float)2 / 3 + U_BORDER ? (float)2 / 3 + U_BORDER : u);
+		u = -u / 3.0 + 1.0;
+		v = v / 2.0;
 		v = (v >= 0.5 - V_BORDER ? (0.5 - V_BORDER) : v);
 	}
 	else if (faceId == 2)
 	{
 		// top face
-		u = ((float)50 / 3 + (x * (float)1 / 3)) / 20;
-		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
-		u = (u <= (float)2 / 3 + U_BORDER ? (float)2 / 3 + U_BORDER : u);
+		u = u / 3.0 + 2.0 / 3.0;
+		v = -v / 2.0 + 1.0;
 		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
 	}
 	else
 	{
 		// bottom face
-		u = ((float)10 / 3 - (x * (float)1 / 3)) / 20;
-		v = ((float)30 / 2 - (z * (float)1 / 2)) / 20;
-		u = (u >= (float)1 / 3 - U_BORDER ? (float)1 / 3 - U_BORDER : u);
+		u = -u / 3.0 + 1.0 / 3.0;
+		v = v / 2.0 + 0.5;
 		v = (v <= 0.5 + V_BORDER ? (0.5 + V_BORDER) : v);
 	}
 
@@ -426,7 +455,6 @@ std::vector<GLfloat> MeshCube::VertexToUVs( std::vector<GLfloat> const& inputVer
 
     out.push_back(u);
     out.push_back(v);
-    
   }
   return out;
 }

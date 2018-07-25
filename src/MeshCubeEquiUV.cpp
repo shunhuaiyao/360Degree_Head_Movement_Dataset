@@ -2,7 +2,6 @@
 //IMT Atlantique
 #include "MeshCubeEquiUV.hpp"
 #include <iostream>
-
 //standard includes
 #include <cmath>
 
@@ -259,7 +258,6 @@ std::vector<GLfloat> MeshCubeEquiUV::VertexRotate(
 std::vector<GLfloat> MeshCubeEquiUV::VertexToUVs( std::vector<GLfloat> const& inputVertexs)
 {
   std::vector<GLfloat> out;
-  
   //Generate Equirectangular UV map
   for(size_t i = 0; i < inputVertexs.size(); i += 3)
   {
