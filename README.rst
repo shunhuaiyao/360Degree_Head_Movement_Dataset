@@ -1,62 +1,40 @@
-# 360° video player
+360° video player
 ======
 
-Content of this folder !
-------------------------
+The 360° video player supports diverse projection schemes, such as equi-rectangular, adjusted equal-area, standard cubemap, and equi-angular cubemap. 
+We implement the 360° video player in C++ language, which is used to display test video sequences to HMD.
+The player is also connected with OSVR server to store the subjects’ head movement data aligned with each frame.
 
-This folder contains the code for a C++ software that communicate with
-the OSVR Server API to get the orientation of a Head Mounted Display (HMD)
-and extract the right portion of a 360-Degree video and render it to
-the HMD.
-
-The folders ``src'' and ``LibAvWrapper'' contains the C++ source code
-of this software.
-Some file are there to allow the generation of a Makefile using cmake.
-
-The folder PythonInterface contains some python scripts to run a user
-test or to perform some data process. This folder contains its own
-README.
-
-Requirements !!
+Prerequisites
 ---------------
 
-To compile this software needs:
+- libav library from ffmpeg. (I currently use FFmpeg 3.3)
 
-- the libav library (from ffmpeg). Becareful to install a recent enough
-library because only the last API from the libav library is yet supported
+- [Glew-2.1.0-win32](https://sourceforge.net/projects/glew/files/glew/2.1.0/)
 
-- the osvr-core and osvr-rendermanager software/libraries from the OSVR
-opensource project. https://github.com/OSVR/OSVR-Core
-https://github.com/sensics/OSVR-RenderManager
+- [boost_1_57_0](https://www.boost.org/users/history/version_1_57_0.html) with Python 3.4
 
-- a recent version of GCC that support C++14 standard (I currently use
-GCC version 6.3.1)
+- [libzmq 4.2.2](https://github.com/zeromq/libzmq/releases)
+
+- [SDL2](https://www.libsdl.org/download-2.0.php)
+
+- [SOIL](https://github.com/kbranigan/Simple-OpenGL-Image-Library)
+
+- [OSVR-Core](https://github.com/OSVR/OSVR-Core) and [OSVR-Rendermanager](https://github.com/sensics/OSVR-RenderManager)
+libraries from the OSVR opensource project. 
 
 
 Compilation steps
 -----------------
 
-Create a build directory:  > mkdir build
-Go inside this directory:  > cd build
-Generate the Makefile:     > cmake ..
-Compile the software:      > make
+mkdir build > cd build > cmake -G "Visual Studio 15 2017" ..
 
 Tested platform:
 ----------------
 
-All the codes and scripts were tested on linux: archlinux with
-up-to-date packages.
-In theory, the C++ software will work on windows with the windows
-version of the OSVR API. We never tested it.
-
-We used the Razer OSVR HDK2 Head Mounted Display. The sofware should
-work as it is with other HMDs such as the Oculus Rift or the HTC Vive
-if the osvr driver for those HMDs are installed.
-
-We use a Nvidia GE 1060 graphic card.
-
+We used the Oculus DK2 Head-mounted Display, which is set up on a PC with Intel i7-3770 CPU, NVIDIA GTX
+1060 GPU, 16 GB RAM, and Windows 10 OS.
 
 Contacts:
 ---------
-E-mail: xavier.corbillon[at]imt-atlantique.fr
-Website: http://dash.ipv6.enstb.fr/headMovements
+E-mail: shunhuai.yao[at]gapp.nthu.edu.tw
