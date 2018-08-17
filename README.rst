@@ -1,4 +1,4 @@
-README
+360° video player
 ======
 
 Content of this folder !
