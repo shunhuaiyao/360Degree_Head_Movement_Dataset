@@ -32,9 +32,14 @@ mkdir build > cd build > cmake -G "Visual Studio 15 2017" ..
 Tested platform:
 ----------------
 
-We used the Oculus DK2 Head-mounted Display, which is set up on a PC with Intel i7-3770 CPU, NVIDIA GTX
+We used the Oculus DK2 HMD, which is set up on a PC with Intel i7-3770 CPU, NVIDIA GTX
 1060 GPU, 16 GB RAM, and Windows 10 OS.
+
+Acknowledgments
+----------------
+
+Thanks for the [contributions](https://github.com/xmar/360Degree_Head_Movement_Dataset) proposed by Corbillon et al., which is enhanced by us for additional projection schemes.
 
 Contacts:
 ---------
-E-mail: shunhuai.yao[at]gapp.nthu.edu.tw
+E-mail: shunhuai.yao@gapp.nthu.edu.tw
