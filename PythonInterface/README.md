@@ -114,22 +114,6 @@ This config.ini suppose that all video are stores in the folder named videos and
 suppose the  ``OSVR Video Player and Head Movement'' logger program is store at
 this location: ../build/OSVRClientTest
 
-
-Run the Post-Processing script
-------------------------------
-
-You can run the basic post processing script by using the startPostProcessing.sh
-bash script. This script will generate a statistics folder inside the results folder.
-
-
-Export the dataset
-------------------
-
-To export the dataset and for instance to share it on our website ( http://dash.ipv6.enstb.fr/headMovements )
-you can use the ExportResults.py python3 script. It will read the results folder and will
-generate a dataset.tar.gz archive that contains only the dataset without the private user
-information nor the post-processing results folder.
-
 Tested platform:
 ----------------
 
