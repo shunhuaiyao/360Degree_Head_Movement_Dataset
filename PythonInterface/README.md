@@ -38,6 +38,7 @@ This script will read the configuration file named config.ini that should be in 
 
 Here an example of the config.ini file (the one used to harvest our dataset):
 
+```
   [AppConfig]
   resultFolder = results
   pathToOsvrClientPlayer = ../build/OSVRClientTest
@@ -108,7 +109,7 @@ Here an example of the config.ini file (the one used to harvest our dataset):
   bufferSize=250
   startOffsetInSecond=0
   projection=EquiAngularCubeMap
-
+```
 This config.ini suppose that all video are stores in the folder named videos and
 suppose the  ``OSVR Video Player and Head Movement'' logger program is store at
 this location: ../build/OSVRClientTest
